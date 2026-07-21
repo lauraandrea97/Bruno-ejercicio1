@@ -17,7 +17,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -25,13 +25,25 @@ jobs:
       - name: Install Bruno CLI
         run: npm install -g @usebruno/cli
 
-      - name: Verify Bruno
+      - name: Verify Bruno Installation
         run: bru --version
 
-      - name: Show project files
-        run: |
-          pwd
-          ls -R
+      - name: Show current directory
+        run: pwd
 
-      - name: Run API Collection
+      - name: Show repository structure
+        run: |
+          echo "============================"
+          echo "Repository structure"
+          echo "============================"
+          find .
+
+      - name: Show environments folder
+        run: |
+          echo "============================"
+          echo "Environments folder"
+          echo "============================"
+          ls -la environments || echo "Folder environments does not exist"
+
+      - name: Run Bruno Collection
         run: bru run --env Dev
