@@ -1,0 +1,37 @@
+name: API Tests with Bruno
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  bruno-api-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Bruno CLI
+        run: npm install -g @usebruno/cli
+
+      - name: Verify Bruno
+        run: bru --version
+
+      - name: Show project files
+        run: |
+          pwd
+          ls -R
+
+      - name: Run API Collection
+        run: bru run --env Dev
