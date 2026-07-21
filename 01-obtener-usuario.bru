@@ -1,0 +1,35 @@
+meta {
+  name: 01 - Obtener Usuario (Servicio A)
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/users/1
+  body: none
+}
+
+script:post-response {
+  bru.setVar("userId", res.body.id);
+  bru.setVar("userName", res.body.name);
+  bru.setVar("userEmail", res.body.email);
+}
+
+tests {
+  test("status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("el usuario tiene id numerico", function() {
+    expect(res.body.id).to.be.a("number");
+  });
+  test("el usuario tiene email valido", function() {
+    expect(res.body.email).to.match(/.+@.+\..+/);
+  });
+}
+
+docs {
+  Este request simula al "Servicio de Usuarios" (Servicio A).
+  Guardamos userId, userName y userEmail como variables para
+  usarlos en el siguiente request, que representa a otro servicio
+  (Servicio de Contenido) consumiendo estos datos.
+}

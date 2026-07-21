@@ -1,0 +1,30 @@
+meta {
+  name: 04 - NEGATIVO - Usuario Inexistente
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/users/9999
+  body: none
+}
+
+tests {
+  test("status 404 (usuario no existe)", function() {
+    expect(res.status).to.equal(404);
+  });
+  test("el body viene vacio o sin id", function() {
+    expect(res.body.id).to.not.exist;
+  });
+}
+
+docs {
+  Prueba negativa fundamental en API to API: si el Servicio A no
+  encuentra el recurso, el flujo NO deberia continuar hacia el
+  Servicio B con datos invalidos (ej. userId: undefined).
+
+  En un escenario real, aqui agregarias una validacion previa
+  ("guard clause") en tu suite: si este request falla, se debe
+  abortar la cadena en lugar de intentar crear un post con
+  un userId inexistente.
+}

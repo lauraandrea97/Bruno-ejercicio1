@@ -1,0 +1,35 @@
+meta {
+  name: 03 - Verificar Posts del Usuario (validacion cruzada)
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/users/{{userId}}/posts
+  body: none
+}
+
+tests {
+  test("status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("el usuario tiene posts asociados", function() {
+    expect(res.body.length).to.be.greaterThan(0);
+  });
+  test("todos los posts pertenecen al userId correcto", function() {
+    res.body.forEach(function(post) {
+      expect(post.userId).to.equal(bru.getVar("userId"));
+    });
+  });
+}
+
+docs {
+  Este request representa una consulta cruzada entre servicios:
+  usamos el userId del Servicio A para preguntarle al Servicio de
+  Contenido "que posts tiene este usuario", y verificamos que la
+  relacion sea consistente en TODOS los registros, no solo en uno.
+
+  Esta es una practica comun en API to API testing: cuando la
+  respuesta es una lista, no basta con validar que la lista no
+  este vacia, hay que validar que CADA elemento cumpla la regla.
+}

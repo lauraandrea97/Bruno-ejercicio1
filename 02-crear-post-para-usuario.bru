@@ -1,0 +1,45 @@
+meta {
+  name: 02 - Crear Post para el Usuario (Servicio B)
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/posts
+  body: json
+}
+
+body:json {
+  {
+    "title": "Prueba de integracion API to API",
+    "body": "Este post fue creado usando el userId obtenido del Servicio A",
+    "userId": {{userId}}
+  }
+}
+
+script:post-response {
+  bru.setVar("postId", res.body.id);
+}
+
+tests {
+  test("status 201 (creado)", function() {
+    expect(res.status).to.equal(201);
+  });
+  test("el post quedo asociado al userId correcto", function() {
+    expect(res.body.userId).to.equal(bru.getVar("userId"));
+  });
+  test("el post tiene id asignado", function() {
+    expect(res.body.id).to.exist;
+  });
+}
+
+docs {
+  Aqui esta la validacion CLAVE de API to API: no basta con que
+  el post se haya creado (status 201), hay que confirmar que
+  el userId que llego desde el Servicio A se haya usado
+  correctamente en el Servicio B (capa funcional, no solo sintactica).
+
+  Nota: JSONPlaceholder es una API fake, no persiste datos reales,
+  siempre devuelve id: 101 en el POST. Sirve para practicar el
+  patron de encadenamiento, no para validar persistencia real.
+}
